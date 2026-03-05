@@ -4,10 +4,13 @@ import { User } from "@/model/user-model";
 import { Testimonial } from "@/model/testimonial-model";
 import { Module } from "@/model/module.model";
 import { replaceMongoIdInArray, replaceMongoIdInObject } from "@/lib/convertData";
+import { getEnrollmentsForCourse } from "./enrollment";
+import { getTestimonialsForCourse } from "./testimonials";
+import { Lesson } from "@/model/lesson.model";
 
 export async function getLatestCourses(limit = 8) {
     const courses = await Course.find({})
-        .sort({ createdAt: -1 }) 
+        .sort({ createdAt: -1 })
         .limit(limit)             // Limit to 8 courses
         .select(["title", "subtitle", "thumbnail", "modules", "price", "category", "instructor"])
         .populate({
@@ -33,7 +36,7 @@ export async function getLatestCourses(limit = 8) {
 
 export async function getCourseList() {
     const courses = await Course.find({})
-        .sort({ createdAt: -1 }) 
+        .sort({ createdAt: -1 })
         .select(["title", "subtitle", "thumbnail", "modules", "price", "category", "instructor"])
         .populate({
             path: "category",
@@ -65,23 +68,66 @@ export async function getCourseDetails(id) {
             path: "testimonials",
             model: Testimonial,
             populate: {
-                path: "user",       
+                path: "user",
                 model: User,
             }
         })
-        .populate({ path: "modules", model: Module })
+        .populate({
+            path: "modules",
+            model: Module,
+            populate: {
+                path: "lessonIds",
+                model: Lesson
+            }
+        })
         .lean();
 
-    // Only replace top-level _id, do not process nested populated objects
+
     return replaceMongoIdInObject({
         ...course,
-        testimonials: course.testimonials, // keep user populated as-is
-        modules: course.modules,
-        instructor: course.instructor,
-        category: course.category
+        testimonials: course?.testimonials,
+        modules: course?.modules,
+        instructor: course?.instructor,
+        category: course?.category,
+
     });
 }
 
 export async function getCourseDetailsByInstructor(instructorId) {
-    const courses = await Course.find({instructor: instructorId}).lean()
+    const courses = await Course.find({ instructor: instructorId }).lean();
+
+    const enrollments = await Promise.all(
+        courses.map(async (course) => {
+            const enrollment = await getEnrollmentsForCourse(course?._id.toString());
+
+            return enrollment;
+        })
+    )
+
+    const totalEnrollments = enrollments.reduce((item, currentValue) => {
+        return item.length + currentValue.length;
+    })
+
+
+    const testimonials = await Promise.all(
+        courses.map(async (course) => {
+            const testimonial = await getTestimonialsForCourse(course?._id.toString());
+
+            return testimonial;
+        })
+    )
+
+    const totalTestimonials = testimonials.flat();
+    const avgRating = (totalTestimonials.reduce(function (acc, obj) {
+        return acc + obj.rating;
+    }, 0)) / totalTestimonials.length;
+
+
+
+    return {
+        "courses": courses.length,
+        "enrollments": totalEnrollments,
+        "reviews": totalTestimonials.length,
+        "ratings": avgRating.toPrecision(2)
+    }
 }
