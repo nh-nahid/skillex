@@ -42,13 +42,15 @@ const HomePage = async () => {
             </Button>
             </Link>
 
-            <Button
+            <Link href="/register/instructor">
+            <Button 
               size="lg"
               variant="outline"
               className="px-8 border-white/30  text-black hover:bg-indigo-500/10 hover:scale-105 transition-all hover:text-white"
             >
               Become an Instructor
             </Button>
+            </Link>
           </div>
         </div>
       </section>

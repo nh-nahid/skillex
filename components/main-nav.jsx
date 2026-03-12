@@ -59,10 +59,10 @@ export function MainNav({ items, children }) {
 
             <DropdownMenuContent align="end" className="w-56 mt-4 bg-slate-900 border border-white/10 backdrop-blur-md">
               <DropdownMenuItem asChild>
-                <Link href="#">Student</Link>
+                <Link href="/register/student" className="text-white ml-2 cursor-pointer">Student</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href="#">Instructor</Link>
+                <Link href="/register/instructor" className="text-white ml-2 cursor-pointer">Instructor</Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

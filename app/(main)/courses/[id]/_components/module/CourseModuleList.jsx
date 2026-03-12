@@ -1,10 +1,8 @@
 import {
-    Accordion,
     AccordionContent,
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion";
-import { StickyNote, Tv } from "lucide-react";
 import CourseLessonList from "./CourseLessonList";
 
 const CourseModuleList = ({module, idx}) => {
