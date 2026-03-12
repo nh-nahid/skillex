@@ -1,5 +1,6 @@
-import Link from "next/link";
+"use client"
 
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,11 +11,35 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { credentialLogin } from "@/app/actions";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export function LoginForm() {
+  const [error, setError] = useState('');
+  const router = useRouter();
+
+  async function onSubmit(e) {
+    e.preventDefault();
+
+    try {
+      const formData = new FormData(e.currentTarget);
+      const response = await credentialLogin(formData);
+
+      if (!response.ok) {
+        console.error(response.error);
+        setError(response.error || "Login failed");
+      } else {
+        // Redirect manually after successful login
+        router.push('/courses');
+      }
+    } catch (error) {
+      setError(error.message);
+    }
+  }
   return (
     <Card className="mx-auto w-full max-w-md rounded-2xl border border-white/10 bg-black/40 backdrop-blur-xl shadow-xl">
-      
+
       <CardHeader className="text-center space-y-2">
         <CardTitle className="text-3xl font-bold bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">
           Welcome Back
@@ -26,10 +51,13 @@ export function LoginForm() {
       </CardHeader>
 
       <CardContent>
-        <form className="grid gap-6">
+        <form onSubmit={onSubmit} className="grid gap-6">
 
           {/* EMAIL */}
           <div className="grid gap-2">
+            {error && (
+              <p className="text-red-500 text-sm text-center">{error}</p>
+            )}
             <Label htmlFor="email" className="text-gray-300">
               Email
             </Label>
@@ -37,10 +65,12 @@ export function LoginForm() {
             <Input
               id="email"
               type="email"
+              name="email"
               placeholder="m@example.com"
               required
               className="bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-indigo-400 focus:ring-indigo-400"
             />
+            
           </div>
 
           {/* PASSWORD */}
@@ -52,9 +82,12 @@ export function LoginForm() {
             <Input
               id="password"
               type="password"
+              name="password"
+              placeholder="Enter your password"
               required
               className="bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-indigo-400 focus:ring-indigo-400"
             />
+            
           </div>
 
           {/* BUTTON */}
@@ -69,12 +102,21 @@ export function LoginForm() {
         {/* REGISTER */}
         <div className="mt-6 text-center text-sm text-gray-400">
           Don&apos;t have an account?{" "}
+          <p>
+            Register as {" "}
           <Link
-            href="/register"
+            href="/register/instructor"
             className="text-indigo-400 hover:text-indigo-300 underline"
           >
-            Register
+             Instructor
+          </Link> {" "} or {" "}
+          <Link
+            href="/register/student"
+            className="text-indigo-400 hover:text-indigo-300 underline"
+          >
+           Student
           </Link>
+          </p>
         </div>
       </CardContent>
     </Card>
