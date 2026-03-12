@@ -2,6 +2,7 @@ import Link from "next/link";
 import { MainNav } from "@/components/main-nav";
 import { SiteFooter } from "@/components/site-footer";
 
+import { SessionProvider } from "next-auth/react"
 const navLinks = [
   { title: "Product", href: "/#features" },
   { title: "Solutions", href: "/solutions" },
@@ -13,10 +14,8 @@ const MainLayout = ({ children }) => {
   return (
     <div className="relative flex min-h-screen flex-col overflow-hidden text-white">
 
-      {/* 🔥 Animated Dark Gradient (Same Colors) */}
       <div className="absolute inset-0 -z-30 bg-gradient-to-b from-slate-950 via-slate-900 to-black bg-[length:200%_200%] animate-gradient-x" />
 
-      {/* ✨ Animated Glow (Same Indigo Color) */}
       <div className="pointer-events-none absolute inset-0 -z-20 overflow-hidden">
         <div className="absolute -top-40 left-1/2 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-indigo-600/20 blur-[120px] animate-float" />
       </div>
@@ -34,9 +33,9 @@ const MainLayout = ({ children }) => {
               Skillex
             </span>
           </Link>
-
+        <SessionProvider>
           <MainNav items={navLinks} />
-
+        </SessionProvider>
           <Link
             href="/signup"
             className="hidden md:inline-flex items-center rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-indigo-500/30 transition-all duration-300 hover:scale-105 hover:shadow-xl"

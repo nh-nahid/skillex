@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
@@ -9,9 +9,16 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button, buttonVariants } from "./ui/button";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "./ui/dropdown-menu";
 import { X, Menu } from "lucide-react";
+import { useSession, signOut } from "next-auth/react";
 
 export function MainNav({ items, children }) {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [loginSession, setLoginSession] = useState(null);
+  const {data: session} = useSession();
+
+  useEffect(() => {
+    setLoginSession(session);
+  }, [session]);
 
   return (
     <>
@@ -42,7 +49,9 @@ export function MainNav({ items, children }) {
 
       <nav className="flex items-center gap-3">
         {/* Desktop Buttons */}
-        <div className="hidden lg:flex items-center gap-3">
+        {
+          !loginSession && (
+              <div className="hidden lg:flex items-center gap-3">
           <Link
             href="/login"
             className={cn(buttonVariants({ size: "sm", variant: "ghost" }), "px-4 text-white/90 hover:text-white")}
@@ -67,6 +76,9 @@ export function MainNav({ items, children }) {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
+          )
+        }
+        
 
         {/* Avatar Menu */}
         <DropdownMenu>
@@ -79,7 +91,7 @@ export function MainNav({ items, children }) {
             </div>
           </DropdownMenuTrigger>
 
-          <DropdownMenuContent align="end" className="w-56 mt-4 bg-slate-900 border border-white/10 backdrop-blur-md">
+          <DropdownMenuContent align="end" className="w-56 mt-4 text-white bg-slate-900 border border-white/10 backdrop-blur-md">
             <DropdownMenuItem asChild>
               <Link href="account">Profile</Link>
             </DropdownMenuItem>
@@ -90,7 +102,7 @@ export function MainNav({ items, children }) {
               <Link href="#">Certificates</Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href="#">Logout</Link>
+              <Link href="#" onClick={() => signOut()} className="cursor-pointer">Logout</Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

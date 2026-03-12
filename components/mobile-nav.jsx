@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-
+import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { useLockBody } from "@/hooks/use-lock-body";
 import {
@@ -12,9 +12,16 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Button, buttonVariants } from "./ui/button";
-
+import { useSession, signOut } from "next-auth/react";
 export function MobileNav({ items, children }) {
+  const [loginSession, setLoginSession] = useState(null);
+    const {data: session} = useSession();
+
   useLockBody();
+
+  useEffect(() => {
+    setLoginSession(session);
+  }, [session]);
 
   return (
     <div
@@ -42,7 +49,8 @@ export function MobileNav({ items, children }) {
         </nav>
 
         {/* Login & Register Buttons */}
-        <div className="flex items-center gap-3 mt-4">
+        {!loginSession && (
+          <div className="flex items-center gap-3 mt-4">
           <Link
             href="/login"
             className={cn(
@@ -72,6 +80,8 @@ export function MobileNav({ items, children }) {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
+        )}
+        
 
         {children}
       </div>
