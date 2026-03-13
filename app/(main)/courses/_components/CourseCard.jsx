@@ -4,6 +4,7 @@ import React from 'react';
 import { BookOpen, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from '@/lib/formatPrice';
+import { EnrollCourse } from '@/components/enroll-course';
 
 const CourseCard = ({course}) => {
     return (
@@ -37,13 +38,8 @@ const CourseCard = ({course}) => {
                       {formatPrice(course?.price)}
                     </span>
 
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="text-indigo-400 hover:bg-indigo-500/10 hover:scale-105 transition-transform"
-                    >
-                      Enroll <ArrowRight className="w-3 ml-1" />
-                    </Button>
+                    <EnrollCourse aslink={true} />
+
                   </div>
                 </div>
               </div>

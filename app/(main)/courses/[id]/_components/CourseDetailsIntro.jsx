@@ -1,3 +1,4 @@
+import { EnrollCourse } from "@/components/enroll-course";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -36,12 +37,8 @@ const CourseDetailsIntro = ({ title,category, subtitle, thumbnail }) => {
           </p>
 
           <div className="mt-8 flex justify-center gap-4 flex-wrap">
-            <Link
-              href="#"
-              className="rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 px-6 py-3 text-sm font-medium shadow-lg shadow-indigo-500/30 hover:scale-105 transition"
-            >
-              Enroll Now
-            </Link>
+            
+            <EnrollCourse aslink={false} />
 
             <Link
               href="#"
