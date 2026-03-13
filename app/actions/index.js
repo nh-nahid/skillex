@@ -23,3 +23,8 @@ export async function credentialLogin(formData) {
     return { ok: false, error: err.message || "Login failed" };
   }
 }
+
+export async function doSocialLogin(formData) {
+    const action = formData.get('action');
+    await signIn(action, {redirectTo: "/courses"})
+}

@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { credentialLogin } from "@/app/actions";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import SocialLogins from "./social-logins";
 
 export function LoginForm() {
   const [error, setError] = useState('');
@@ -118,6 +119,9 @@ export function LoginForm() {
           </Link>
           </p>
         </div>
+
+        <SocialLogins />
+
       </CardContent>
     </Card>
   );
