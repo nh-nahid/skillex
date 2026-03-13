@@ -16,9 +16,8 @@ function Menu() {
 				<li className="navbar-item account-menu" key={i}>
 					<Link
 						href={item.href}
-						className={`navbar-link flex items-center py-2 rounded ${
-							pathname === item.href ? "text-primary" : "text-slate-400"
-						}`}>
+						className={`navbar-link flex items-center py-2 rounded ${pathname === item.href ? "text-white" : "text-slate-400"
+							}`}>
 						<h6 className="mb-0 font-semibold">{item?.label}</h6>
 					</Link>
 				</li>

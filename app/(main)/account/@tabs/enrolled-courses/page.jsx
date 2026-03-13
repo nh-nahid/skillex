@@ -7,7 +7,7 @@ import Image from "next/image";
 
 function EnrolledCourses() {
   return (
-    <div className="grid sm:grid-cols-2 gap-6">
+    <div className="grid sm:grid-cols-2 gap-6 mt-8">
       {[1, 2, 3, 4].map((course, idx) => (
         <div
           key={idx}

@@ -10,11 +10,18 @@ import { Button, buttonVariants } from "./ui/button";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "./ui/dropdown-menu";
 import { X, Menu } from "lucide-react";
 import { useSession, signOut } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 export function MainNav({ items, children }) {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [loginSession, setLoginSession] = useState(null);
   const {data: session} = useSession();
+  
+
+
+  if(session?.error === 'RefreshAccessTokenError'){
+    redirect('/login')
+  }
 
   useEffect(() => {
     setLoginSession(session);
