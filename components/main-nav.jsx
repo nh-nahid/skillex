@@ -93,17 +93,22 @@ export function MainNav({ items, children }) {
 
           <DropdownMenuContent align="end" className="w-56 mt-4 text-white bg-slate-900 border border-white/10 backdrop-blur-md">
             <DropdownMenuItem asChild>
-              <Link href="account">Profile</Link>
+              <Link href="/account" className="cursor-pointer">Profile</Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href="account/enrolled-courses">My Courses</Link>
+              <Link href="/account/enrolled-courses" className="cursor-pointer">My Courses</Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href="#">Certificates</Link>
+              <Link href="#" className="cursor-pointer">Certificates</Link>
             </DropdownMenuItem>
-            <DropdownMenuItem asChild>
+            {
+              loginSession && (
+                <DropdownMenuItem asChild>
               <Link href="#" onClick={() => signOut()} className="cursor-pointer">Logout</Link>
             </DropdownMenuItem>
+              )
+            }
+            
           </DropdownMenuContent>
         </DropdownMenu>
 
